@@ -16,7 +16,6 @@ export default async function Home() {
 
   const supabase = createClient(supabaseUrl, supabaseKey)
 
-  // درخواست نهایی و صحیح با نام‌گذاری دقیق دیتابیس شما
   const { data: knowledgeData, error } = await supabase
     .from('knowledge_units')
     .select(`
@@ -55,10 +54,11 @@ export default async function Home() {
             {knowledgeData.map((unit, index) => (
               <div key={index} className="bg-white p-6 rounded-lg shadow-md border border-gray-200 flex flex-col">
                 
+                {/* [0] یعنی آیتم اول لیست محصولات را بگیر */}
                 <div className="mb-4">
                   <span className="text-xs font-semibold text-blue-600 uppercase tracking-wide">Product</span>
-                  <h3 className="text-xl font-bold mt-1">{unit.products?.name || 'Unknown Product'}</h3>
-                  <p className="text-sm text-gray-500">by {unit.products?.manufacturers?.name || 'Unknown'}</p>
+                  <h3 className="text-xl font-bold mt-1">{unit.products?.[0]?.name || 'Unknown Product'}</h3>
+                  <p className="text-sm text-gray-500">by {unit.products?.[0]?.manufacturers?.[0]?.name || 'Unknown'}</p>
                 </div>
 
                 <div className="bg-green-50 p-3 rounded mb-4 border border-green-100">
@@ -69,19 +69,19 @@ export default async function Home() {
                 <div className="grid grid-cols-2 gap-3 text-sm mb-4 flex-grow">
                   <div>
                     <span className="text-gray-500 block">Hazard</span>
-                    <span className="font-medium capitalize">{unit.hazards?.name} ({unit.hazards?.type})</span>
+                    <span className="font-medium capitalize">{unit.hazards?.[0]?.name} ({unit.hazards?.[0]?.type})</span>
                   </div>
                   <div>
                     <span className="text-gray-500 block">Building Element</span>
-                    <span className="font-medium capitalize">{unit.building_elements?.name} ({unit.building_elements?.type})</span>
+                    <span className="font-medium capitalize">{unit.building_elements?.[0]?.name} ({unit.building_elements?.[0]?.type})</span>
                   </div>
                 </div>
 
                 <div className="mt-auto pt-4 border-t text-xs text-gray-600">
-                  <p><strong>Evidence:</strong> {unit.certificates?.standards}</p>
-                  <p><strong>Issued by:</strong> {unit.certificates?.issuing_body}</p>
-                  <p className={`mt-1 font-bold ${unit.certificates?.verification_status === 'verified' ? 'text-green-600' : 'text-red-600'}`}>
-                    Status: {unit.certificates?.verification_status?.toUpperCase()}
+                  <p><strong>Evidence:</strong> {unit.certificates?.[0]?.standards}</p>
+                  <p><strong>Issued by:</strong> {unit.certificates?.[0]?.issuing_body}</p>
+                  <p className={`mt-1 font-bold ${unit.certificates?.[0]?.verification_status === 'verified' ? 'text-green-600' : 'text-red-600'}`}>
+                    Status: {unit.certificates?.[0]?.verification_status?.toUpperCase()}
                   </p>
                 </div>
               </div>
