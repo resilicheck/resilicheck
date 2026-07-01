@@ -44,7 +44,9 @@ export async function POST(req: NextRequest) {
     });
 
     const toolCall = response.choices[0].message.tool_calls?.[0];
-    if (!toolCall) {
+    
+    // بررسی اینکه آیا ابزار از نوع استاندارد است (برای رد کردن ارور بازرس Vercel)
+    if (!toolCall || toolCall.type !== 'function') {
       return NextResponse.json({ error: "Could not understand query" }, { status: 400 });
     }
 
